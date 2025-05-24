@@ -131,9 +131,10 @@ function prepare_select_all($connection, $table_name, $select_kws = null, $order
 
 function prepare_raw_query($connection, $raw_query_string, $extra_value = null):mysqli_stmt{
     $raw_query_string = trim($raw_query_string, "\n");
-    if($extra_value){
-        $raw_query_string = str_replace("?", $extra_value, $raw_query_string);
-    }
     $query = $connection->prepare($raw_query_string);
+    if($extra_value){
+        // $raw_query_string = str_replace("?", $extra_value, $raw_query_string);
+        $query->bind_param("i", $extra_value);
+    }
     return $query;
 }
