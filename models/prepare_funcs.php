@@ -10,14 +10,14 @@ require_once __DIR__ . '/helper_funcs.php';
  * @param string                        $types      String of types for bind_param (e.g., 'ssi').
  * @return mysqli_stmt                              The prepared mysqli statement.
  */
-function prepare_insert_query($connection, $table_name, $datas, $types = "sss"): mysqli_stmt
+function prepare_insert_query($connection, $table_name, $datas): mysqli_stmt
 {
     $columns = implode(", ", array_keys($datas));
     $placeholders = implode(", ", array_fill(0, count($datas), '?'));
     $query_str = "INSERT INTO $table_name($columns) VALUES($placeholders)";
     $query = $connection->prepare($query_str);
     $values = array_values($datas);
-    $query->bind_param($types, ...$values);
+    $query->bind_param(get_types($values), ...$values);
     return $query;
 }
 
@@ -46,7 +46,8 @@ function prepare_update_query($connection, $table_name, $datas, $types = "sssi")
 
     $query_str = "UPDATE $table_name SET $update_data_str WHERE id = ? ";
     $query = $connection->prepare($query_str);
-    $query->bind_param(get_types(array_values($datas)), ...array_values($datas));
+    $values = array_values($datas);
+    $query->bind_param(get_types(array_values($datas)), ...$values);
 
     return $query;
 }
@@ -120,9 +121,19 @@ function prepare_search_query(mysqli $connection, string $table_name, array $col
  * @param string $table_name The name of the table to select from.
  * @return mysqli_result     The result set from the query.
  */
-function prepare_select_all($connection, $table_name): mysqli_result
+function prepare_select_all($connection, $table_name, $select_kws = null, $order = "DESC"): mysqli_result
 {
-    $query_str = "SELECT * FROM $table_name ORDER BY id DESC";
+    $columns = $select_kws ? trim($select_kws) : "*" ;
+    $query_str = "SELECT $columns FROM $table_name ORDER BY id $order";
     $query = $connection->query($query_str);
+    return $query;
+}
+
+function prepare_raw_query($connection, $raw_query_string, $extra_value = null):mysqli_stmt{
+    $raw_query_string = trim($raw_query_string, "\n");
+    if($extra_value){
+        $raw_query_string = str_replace("?", $extra_value, $raw_query_string);
+    }
+    $query = $connection->prepare($raw_query_string);
     return $query;
 }

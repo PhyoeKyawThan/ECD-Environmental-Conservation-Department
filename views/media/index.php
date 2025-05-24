@@ -62,6 +62,10 @@ if (isset($_GET["n"])) {
         }
     </style>
     <div id="media">
+        <?php
+            $media = new MediaModel();
+            foreach($media-> as $media)
+        ?>
         <div class="item">
             <div>
                 <img src="../../static/images/Logo_of_Ministry_of_Natural_Resources_and_Environmental_Conservation_(Myanmar).png"
@@ -77,7 +81,7 @@ if (isset($_GET["n"])) {
             </div>
         </div>
 
-        <div class="item">
+        <!-- <div class="item">
             <div>
                 <img src="../../static/images/Logo_of_Ministry_of_Natural_Resources_and_Environmental_Conservation_(Myanmar).png"
                     alt="" srcset="">
@@ -135,6 +139,6 @@ if (isset($_GET["n"])) {
                 <br>
                 <span class="date">May 20, 2025</span>
             </div>
-        </div>
+        </div> -->
     </div>
 <?php } ?>
