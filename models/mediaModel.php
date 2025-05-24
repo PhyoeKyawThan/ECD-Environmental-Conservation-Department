@@ -4,17 +4,45 @@ require_once __DIR__ . '/Connection.php';
 require_once __DIR__ . '/prepare_funcs.php';
 /**
  * Model for media table basic crud to advenced search
- * 
+ *
  */
 class MediaModel extends Connection
 {
     private $table_name = "media";
+    /**
+     * Summary of id
+     * @var int media id
+     */
     public $id;
+    /**
+     * Summary of title
+     * @var string media title or topic
+     */
     public $title;
+    /**
+     * Summary of description
+     * @var string media description or content
+     */
     public $description;
+    /**
+     * Summary of images
+     * @var string explod images path
+     */
     public $images;
     public $uploaded_at;
-    public $extra; // for used in search column or somethng, format ["search_term" => "string", "columns" => ["colum1", colum2"]]
+    /**
+     * Additional search parameters.
+     *
+     * Format:
+     * [
+     *   "search_term" => string,
+     *   "columns" => string[]
+     * ]
+     *
+     * @var array<string, mixed>
+     */
+    public $extra;
+
 
     /**
      * Adding new media data to database 
@@ -133,12 +161,19 @@ class MediaModel extends Connection
     }
 }
 
-$media = new MediaModel();
-// $media->id = 2;
-// // print_r($media->get_all());
+// $media = new MediaModel();
+// // $media->id = 2;
+// // // print_r($media->get_all());
 // $media->title = "Something";
 // $media->description = "Some desc";
-// $media->images = "Image1, Image2 up. Image3";
-// $media->update();
+// // $media->images = "Image1, Image2 up. Image3";
+// // $media->update();
+// $media->extra = [
+//     "search_term" => "s",
+//     "columns" => [
+//         "title",
+//         "description"
+//     ]
+// ];
 
-$media->add();
+// print_r($media->search());
