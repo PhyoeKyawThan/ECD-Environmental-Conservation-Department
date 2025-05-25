@@ -1,10 +1,11 @@
 <?php
-session_start();
+
 require_once __DIR__ . '/ContentsModel.php';
 require_once __DIR__ . '/prepare_funcs.php';
 class MediaModel extends ContentsModel
 {
     private $category = "media";
+    public $title;
     // private $category_id = 
     public function get_all()
     {
@@ -27,10 +28,17 @@ class MediaModel extends ContentsModel
         } catch (Exception $e) {
             die("Error on getting all media contents: $e");
         }
+    }
 
+    public function get(){
+        $query = prepare_raw_query(parent::$connection,
+        "SELECT * FROM contents WHERE title = ? ", $this->title);
+        $query->execute();
+        $result = $query->get_result();
+        return $result->fetch_assoc();
     }
 }
 
-$media = new MediaModel();
-print_r($media->get_all());
+// $media = new MediaModel();
+// print_r($media->get_all());
 // print_r($_SESSION["categories"]);
